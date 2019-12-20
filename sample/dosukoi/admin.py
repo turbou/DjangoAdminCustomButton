@@ -29,6 +29,6 @@ class OyoyoAdmin(admin.ModelAdmin):
     class Media:
         css = {
             "all": ("bootstrap/css/mybootstrap.css",)
-        } 
+        }
         js = ('bootstrap/js/bootstrap.min.js',)
 
