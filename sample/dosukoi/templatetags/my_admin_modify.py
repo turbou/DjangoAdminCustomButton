@@ -26,8 +26,9 @@ def my_submit_row(context):
         ),
         'show_save_and_continue': not is_popup and context['has_change_permission'] and show_save_and_continue,
         'show_save': show_save,
-        'show_custom_button_1': context.get('can_custom1', False),
-        'show_custom_button_2': context.get('can_custom2', False),
+        'show_update': context.get('can_update', False),
+        'show_upauth': context.get('can_upauth', False),
+        'show_bzauth': context.get('can_bzauth', False),
     })
     return ctx
 

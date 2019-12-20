@@ -33,8 +33,14 @@ class OyoyoAdmin(admin.ModelAdmin):
         self.save_on_top = False
         self.save_as = False
         extra_context = extra_context or {}
-        extra_context['can_custom1'] = True
-        extra_context['can_custom2'] = True
+        if 'mode' in request.GET:
+            mode = request.GET.get('mode')
+            if mode == 'update':
+                extra_context['can_update'] = True
+            elif mode == 'upauth':
+                extra_context['can_upauth'] = True
+            elif mode == 'bzauth':
+                extra_context['can_bzauth'] = True
         return super().change_view(request, object_id, form_url, extra_context=extra_context)
 
     class Media:
