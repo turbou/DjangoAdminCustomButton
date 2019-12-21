@@ -20,9 +20,9 @@ class OyoyoAdmin(admin.ModelAdmin):
     def operation(self, obj):
         url = reverse('admin:%s_%s_change' % (obj._meta.app_label, obj._meta.model_name), args=[obj.id])
         str_buffer = []
-        str_buffer.append('<button type="button" class="btn btn-sm btn-outline-secondary" title="修正" name="edit" onclick="location.href=\'%s?mode=update\'">修正</button>' % url)
-        str_buffer.append('<button type="button" class="btn btn-sm btn-outline-secondary" title="更新承認" name="edit" onclick="location.href=\'%s?mode=upauth\'">更新承認</button>' % url)
-        str_buffer.append('<button type="button" class="btn btn-sm btn-outline-secondary" title="営業承認" name="edit" onclick="location.href=\'%s?mode=bzauth\'">営業承認</button>' % url)
+        str_buffer.append('<button type="button" class="btn btn-sm btn-outline-secondary list_button" title="修正" name="edit" onclick="location.href=\'%s?mode=update\'">修正</button>' % url)
+        str_buffer.append('<button type="button" class="btn btn-sm btn-outline-secondary list_button" title="更新承認" name="edit" onclick="location.href=\'%s?mode=upauth\'">更新承認</button>' % url)
+        str_buffer.append('<button type="button" class="btn btn-sm btn-outline-secondary list_button" title="営業承認" name="edit" onclick="location.href=\'%s?mode=bzauth\'">営業承認</button>' % url)
         return mark_safe('<div class="bootstrap">%s</div>' % ('&nbsp;&nbsp;'.join(str_buffer)))
     operation.short_description = '操作'
 
@@ -45,7 +45,7 @@ class OyoyoAdmin(admin.ModelAdmin):
 
     class Media:
         css = {
-            "all": ("bootstrap/css/mybootstrap.css",)
+            "all": ("bootstrap/css/mybootstrap.css", "admin/css/my.css")
         }
         js = ('bootstrap/js/bootstrap.min.js',)
 

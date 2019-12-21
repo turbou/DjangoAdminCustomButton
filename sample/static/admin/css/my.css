@@ -1,0 +1,14 @@
+.list_button {
+  font-size: 12px !important;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 -15px 20px -10px rgba(0, 0, 0, 0.15) inset;
+  cursor: pointer;
+  height: 21px;
+  line-height: 1 !important;
+  padding: 4px 8px;
+  margin: 0;
+  width: 75px;
+}
+
