@@ -90,5 +90,5 @@ class OyoyoAdmin(admin.ModelAdmin):
         css = {
             "all": ("bootstrap/css/mybootstrap.css", "admin/css/my.css")
         }
-        js = ('bootstrap/js/bootstrap.min.js',)
+        js = ('admin/js/vendor/jquery/jquery.min.js', 'bootstrap/js/bootstrap.min.js', 'admin/js/confirm.js',)
 

@@ -5,9 +5,9 @@
     {% url opts|admin_urlname:'delete' original.pk|admin_urlquote as delete_url %}
     <p class="deletelink-box"><a href="{% add_preserved_filters delete_url %}" class="deletelink">{% trans "Delete" %}</a></p>
 {% endif %}
-{% if show_update %}<input type="submit" value="更新" name="_update" />{% endif %}
-{% if show_upauth %}<input type="submit" value="更新承認" name="_upauth" />{% endif %}
-{% if show_bzauth %}<input type="submit" value="営業承認" name="_bzauth" />{% endif %}
+{% if show_update %}<input type="button" id="update" value="更新" name="_update" />{% endif %}
+{% if show_upauth %}<input type="button" id="update" value="更新承認" name="_upauth" />{% endif %}
+{% if show_bzauth %}<input type="button" id="update" value="営業承認" name="_bzauth" />{% endif %}
 {% if show_save_as_new %}<input type="submit" value="{% trans 'Save as new' %}" name="_saveasnew" />{% endif %}
 {% if show_save_and_add_another %}<input type="submit" value="{% trans 'Save and add another' %}" name="_addanother" />{% endif %}
 {% if show_save_and_continue %}<input type="submit" value="{% trans 'Save and continue editing' %}" name="_continue" />{% endif %}
