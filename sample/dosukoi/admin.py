@@ -5,15 +5,31 @@ from django.urls import reverse
 
 from .models import Oyoyo
 
+class OyoyoAdminForm(forms.ModelForm):
+    updated_at_chk = forms.CharField(widget=forms.HiddenInput(), required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['updated_at_chk'].initial = self.instance.updated_at
+        self.fields['name'].widget.attrs = {'size':30, 'placeholder':'名前'}
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if self.instance.id:
+            oldobj = self._meta.model.objects.get(pk=self.instance.id)
+            if str(oldobj.updated_at) != cleaned_data['updated_at_chk']:
+                raise forms.ValidationError('他の誰かが変更を加えています。開き直してから再度、保存してください。')
+
 @admin.register(Oyoyo)
 class OyoyoAdmin(admin.ModelAdmin):
+    form = OyoyoAdminForm
     change_form_template = 'admin/my_change_form.html'
     search_fields = ('name',)
-    list_display = ('operation', 'name', 'app_status')
+    list_display = ('operation', 'name', 'app_status', 'updated_at')
     list_filter = ('app_status',)
     fieldsets = [
         (None, {'fields': [
-            ('name', 'app_status'),
+            ('name', 'app_status', 'updated_at_chk',),
         ]}),
     ]
 
