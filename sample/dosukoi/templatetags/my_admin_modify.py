@@ -5,7 +5,7 @@ register = template.Library()
 
 @register.inclusion_tag('admin/my_submit_line.html', takes_context=True)
 def my_submit_row(context):
-    """ 
+    """
     Display the row of buttons for delete and save.
     """
     change = context['change']
@@ -16,16 +16,20 @@ def my_submit_row(context):
     ctx = Context(context)
     ctx.update({
         'show_delete_link': (
-            not is_popup and context['has_delete_permission'] and 
-            change and context.get('show_delete', True)
-        ),  
-        'show_save_as_new': not is_popup and change and save_as,
-        'show_save_and_add_another': (
-            context['has_add_permission'] and not is_popup and 
-            (not save_as or context['add'])
+            not is_popup and context['has_delete_permission'] and
+            change and context.get('show_delete', True) and
+            context.get('can_update', False)
         ),
-        'show_save_and_continue': not is_popup and context['has_change_permission'] and show_save_and_continue,
-        'show_save': show_save,
+        #'show_save_as_new': not is_popup and change and save_as,
+        'show_save_as_new': False,
+        #'show_save_and_add_another': (
+        #    context['has_add_permission'] and not is_popup and
+        #    (not save_as or context['add'])
+        #),
+        'show_save_and_add_another': False,
+        #'show_save_and_continue': not is_popup and context['has_change_permission'] and show_save_and_continue,
+        'show_save_and_continue': False,
+        'show_save': False,
         'show_update': context.get('can_update', False),
         'show_upauth': context.get('can_upauth', False),
         'show_bzauth': context.get('can_bzauth', False),

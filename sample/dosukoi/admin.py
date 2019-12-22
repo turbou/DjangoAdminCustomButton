@@ -6,11 +6,15 @@ from django.urls import reverse
 from .models import Oyoyo
 
 class OyoyoAdminForm(forms.ModelForm):
+    app_status = forms.CharField(widget=forms.HiddenInput(), required=False)
     updated_at_chk = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        #print(self.request.GET.get('mode'))
         super().__init__(*args, **kwargs)
         self.fields['updated_at_chk'].initial = self.instance.updated_at
+        self.fields['app_status'].initial = self.instance.app_status
         self.fields['name'].widget.attrs = {'size':30, 'placeholder':'名前'}
 
     def clean(self):
@@ -19,6 +23,16 @@ class OyoyoAdminForm(forms.ModelForm):
             oldobj = self._meta.model.objects.get(pk=self.instance.id)
             if str(oldobj.updated_at) != cleaned_data['updated_at_chk']:
                 raise forms.ValidationError('他の誰かが変更を加えています。開き直してから再度、保存してください。')
+        if '_update' in self.request.POST:
+            print('clean: update')
+            self.cleaned_data['app_status'] = 'W'
+        elif '_upauth' in self.request.POST:
+            print('clean: upauth')
+            self.cleaned_data['app_status'] = 'U'
+        elif '_bzauth' in self.request.POST:
+            print('clean: bzauth')
+            self.cleaned_data['app_status'] = 'B'
+        return self.cleaned_data
 
 @admin.register(Oyoyo)
 class OyoyoAdmin(admin.ModelAdmin):
@@ -27,9 +41,10 @@ class OyoyoAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     list_display = ('operation', 'name', 'app_status', 'updated_at')
     list_filter = ('app_status',)
+    #readonly_fields = ('app_status',)
     fieldsets = [
         (None, {'fields': [
-            ('name', 'app_status', 'updated_at_chk',),
+            'name', 'app_status', 'updated_at_chk',
         ]}),
     ]
 
@@ -45,6 +60,14 @@ class OyoyoAdmin(admin.ModelAdmin):
     def get_list_display_links(self, request, list_display):
         return None
 
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super().get_form(request, obj, **kwargs)
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+                return ModelForm(*args, **kwargs)
+        return ModelFormMetaClass
+
     def change_view(self, request, object_id, form_url='', extra_context=None):
         self.save_on_top = False
         self.save_as = False
@@ -58,6 +81,10 @@ class OyoyoAdmin(admin.ModelAdmin):
             elif mode == 'bzauth':
                 extra_context['can_bzauth'] = True
         return super().change_view(request, object_id, form_url, extra_context=extra_context)
+
+    def save_model(self, request, obj, form, change):
+        print('save_model: %s' % obj.app_status)
+        obj.save()
 
     class Media:
         css = {
