@@ -16,6 +16,9 @@ class OyoyoAdminForm(forms.ModelForm):
         self.fields['updated_at_chk'].initial = self.instance.updated_at
         self.fields['app_status'].initial = self.instance.app_status
         self.fields['name'].widget.attrs = {'size':30, 'placeholder':'名前'}
+        self.fields['filepath'].widget.attrs = {'size':100,}
+        if self.instance:
+            self.fields["filepath"].help_text = '<a href="file:///Users/turbou/Desktop/fiat04.jpg" style="font-size: large;">file:///Users/turbou/Desktop/fiat04.jpg</a>'
 
     def clean(self):
         cleaned_data = super().clean()
@@ -44,7 +47,7 @@ class OyoyoAdmin(admin.ModelAdmin):
     #readonly_fields = ('app_status',)
     fieldsets = [
         (None, {'fields': [
-            'name', 'app_status', 'updated_at_chk',
+            'name', 'filepath', 'app_status', 'updated_at_chk',
         ]}),
     ]
 
